@@ -18,6 +18,7 @@
 
   <depend>fastcdr</depend>
   <depend>foonathan_memory_vendor</depend>
+  <depend>asio</depend>
   <depend>libssl-dev</depend>
   <depend>tinyxml2</depend>
   <depend>python3</depend>
