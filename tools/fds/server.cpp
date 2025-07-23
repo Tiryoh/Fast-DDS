@@ -36,9 +36,15 @@
 #include <fastrtps/utils/IPLocator.h>
 #include <fastrtps/xmlparser/XMLProfileManager.h>
 
+#include <utils/connection_logging.h>
+
 volatile sig_atomic_t g_signal_status = 0;
 std::mutex g_signal_mutex;
 std::condition_variable g_signal_cv;
+
+// Connection logging configuration
+static bool g_enable_connection_logging = false;
+static std::string g_log_level = "Error";
 
 void sigint_handler(
         int signum)
@@ -101,6 +107,41 @@ int fastdds_discovery_server(
     {
         option::printUsage(std::cout, usage);
         return 0;
+    }
+
+    // Process logging options
+    if (nullptr != options[LOG_CONNECTIONS])
+    {
+        g_enable_connection_logging = true;
+        set_connection_logging_enabled(true);
+    }
+
+    if (nullptr != options[LOG_LEVEL])
+    {
+        g_log_level = options[LOG_LEVEL].arg;
+        
+        // Set log verbosity
+        if (g_log_level == "Info")
+        {
+            Log::SetVerbosity(Log::Kind::Info);
+            std::cout << "Log level set to Info - connection logs should be visible" << std::endl;
+        }
+        else if (g_log_level == "Warning")
+        {
+            Log::SetVerbosity(Log::Kind::Warning);
+            std::cout << "Log level set to Warning" << std::endl;
+        }
+        else if (g_log_level == "Error")
+        {
+            Log::SetVerbosity(Log::Kind::Error);
+            std::cout << "Log level set to Error" << std::endl;
+        }
+        else
+        {
+            std::cout << "Invalid log level: " << g_log_level << ". Using default (Error)." << std::endl;
+            g_log_level = "Error";
+            Log::SetVerbosity(Log::Kind::Error);
+        }
     }
 
     DomainParticipantQos participantQos;
@@ -724,6 +765,30 @@ option::ArgStatus Arg::check_tcp_port(
     {
         std::cout << "Option '" << option.name
                   << "' value should be an TCP port between 1025 and 65535." << std::endl;
+    }
+
+    return option::ARG_ILLEGAL;
+}
+
+option::ArgStatus Arg::check_log_level(
+        const option::Option& option,
+        bool msg)
+{
+    // The argument is required
+    if (nullptr != option.arg)
+    {
+        std::string level = std::string(option.arg);
+        
+        if (level == "Error" || level == "Warning" || level == "Info")
+        {
+            return option::ARG_OK;
+        }
+    }
+
+    if (msg)
+    {
+        std::cout << "Option '" << option.name
+                  << "' value should be Error, Warning, or Info." << std::endl;
     }
 
     return option::ARG_ILLEGAL;

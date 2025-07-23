@@ -20,6 +20,7 @@
 
 #include <fastdds/rtps/attributes/ThreadSettings.hpp>
 #include <fastrtps/fastrtps_dll.h>
+#include <utils/connection_logging.h>
 
 /**
  * eProsima log layer. Logging categories and verbosity can be specified dynamically at runtime.
@@ -345,7 +346,8 @@ protected:
 #define EPROSIMA_LOG_INFO_IMPL_(cat, msg)                                                                   \
     do {                                                                                                \
         using namespace eprosima::fastdds::dds;                                                         \
-        if (Log::GetVerbosity() >= Log::Kind::Info)                                                     \
+        if (Log::GetVerbosity() >= Log::Kind::Info ||                                                  \
+            (is_connection_logging_enabled() && is_connection_log_category(#cat)))                         \
         {                                                                                               \
             std::stringstream fastdds_log_ss_tmp__;                                                     \
             fastdds_log_ss_tmp__ << msg;                                                                \

@@ -30,7 +30,9 @@ enum  optionIndex
     TCPADDRESS,
     TCP_PORT,
     BACKUP,
-    XML_FILE
+    XML_FILE,
+    LOG_LEVEL,
+    LOG_CONNECTIONS
 };
 
 struct Arg : public option::Arg
@@ -48,6 +50,10 @@ struct Arg : public option::Arg
             bool msg);
 
     static option::ArgStatus check_tcp_port(
+            const option::Option& option,
+            bool msg);
+
+    static option::ArgStatus check_log_level(
             const option::Option& option,
             bool msg);
 };
@@ -90,6 +96,12 @@ const option::Descriptor usage[] = {
       "\t              be overriden. A XML file with several profiles will take\n"
       "\t              the profile with \"is_default_profile=\"true\"\" unless \n"
       "\t              another profile using uri with \"@\" character is defined.\n"},
+
+    { LOG_LEVEL, 0, "",  "log-level",    Arg::check_log_level,
+      "  \t--log-level    Set logging level (Error|Warning|Info). Defaults to Error\n" },
+
+    { LOG_CONNECTIONS, 0, "c", "log-connections", Arg::None,
+      "  -c  \t--log-connections Enable participant connection/disconnection logging.\n" },
 
     { UNKNOWN,   0, "",  "",              Arg::None,
       "Examples:\n"

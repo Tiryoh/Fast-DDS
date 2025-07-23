@@ -324,7 +324,9 @@ void PDPServerListener::onNewCacheChangeAdded(
             {
                 // TODO: pending avoid builtin connections on client info relayed by other server
 
-                EPROSIMA_LOG_INFO(RTPS_PDP_LISTENER, "Registering a new participant: " << guid);
+                EPROSIMA_LOG_INFO(RTPS_PDP_LISTENER, "PARTICIPANT CONNECTED - GUID: " << guid 
+                    << " | Unicast Locators count: " << participant_data.metatraffic_locators.unicast.size()
+                    << " | Type: " << (is_client ? "CLIENT" : (pdp_server()->getRTPSParticipant()->getAttributes().builtin.discovery_config.discoveryProtocol == DiscoveryProtocol_t::SERVER ? "SERVER" : "OTHER")));
 
                 // Create a new participant proxy entry
                 pdata = pdp_server()->createParticipantProxyData(participant_data, writer_guid);

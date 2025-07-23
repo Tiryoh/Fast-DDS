@@ -1034,6 +1034,9 @@ bool PDPServer::remove_remote_participant(
         const GUID_t& partGUID,
         ParticipantDiscoveryInfo::DISCOVERY_STATUS reason)
 {
+    EPROSIMA_LOG_INFO(RTPS_PDP_LISTENER, "PARTICIPANT DISCONNECTED - GUID: " << partGUID 
+        << " | Reason: " << reason);
+        
     auto endpoints = static_cast<fastdds::rtps::DiscoveryServerPDPEndpoints*>(builtin_endpoints_.get());
 
     // Notify the DiscoveryDataBase on lease duration removal because the listener

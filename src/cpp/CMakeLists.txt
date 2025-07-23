@@ -248,6 +248,7 @@ set(${PROJECT_NAME}_source_files
     utils/TimedConditionVariable.cpp
     utils/string_convert.cpp
     utils/UnitsParser.cpp
+    utils/connection_logging.cpp
 
     dds/core/types.cpp
     dds/core/Exception.cpp
@@ -483,6 +484,7 @@ target_compile_definitions(${PROJECT_NAME}
     $<$<NOT:$<BOOL:${IS_THIRDPARTY_BOOST_SUPPORTED}>>:FASTDDS_SHM_TRANSPORT_DISABLED> # Do not compile SHM Transport
     $<$<BOOL:${SHM_TRANSPORT_DEFAULT}>:SHM_TRANSPORT_BUILTIN> # Enable SHM as built-in transport
     $<$<BOOL:${STDOUTERR_LOG_CONSUMER}>:STDOUTERR_LOG_CONSUMER> # Enable StdoutErrConsumer as default LogConsumer
+    $<$<BOOL:${FASTDDS_ENFORCE_LOG_INFO}>:FASTDDS_ENFORCE_LOG_INFO> # Enforce INFO log level
     INTERFACE
     $<$<BOOL:${WIN32}>:${PROJECT_NAME_UPPER}_NO_LIB>
     PUBLIC

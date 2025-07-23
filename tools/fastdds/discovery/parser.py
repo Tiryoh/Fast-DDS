@@ -42,13 +42,21 @@ class Parser:
         tool_path = str(self.__find_tool_path().resolve())
 
         try:
+            # Test if tool exists and can run
             result = subprocess.run(
                 [tool_path],
                 stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
                 universal_newlines=True
             )
 
             if result.returncode != 0:
+                # Tool exists but failed to run - show actual error
+                print(f"Error running fast-discovery-server:")
+                if result.stderr:
+                    print(result.stderr, end='')
+                if result.stdout:
+                    print(result.stdout, end='')
                 sys.exit(result.returncode)
 
             if (
@@ -58,19 +66,23 @@ class Parser:
                ):
                 print(self.__edit_tool_help(result.stdout))
             else:
-                # Call the tool
+                # Call the tool with actual arguments
                 result = subprocess.run([tool_path] + argv)
                 if result.returncode != 0:
+                    # Exit with same code, but don't print misleading messages
                     sys.exit(result.returncode)
 
         except KeyboardInterrupt:
             # it lets the subprocess to handle the exception
             pass
 
-        except BaseException as e:
-            self.__help_message += str(e)
-            self.__help_message += '\n fast-discovery-server tool not found!'
-            print(self.__help_message)
+        except FileNotFoundError:
+            print(f'fast-discovery-server tool not found at: {tool_path}')
+            print('Please ensure Fast-DDS is properly built and installed.')
+            sys.exit(1)
+
+        except Exception as e:
+            print(f'Unexpected error running fast-discovery-server: {str(e)}')
             sys.exit(1)
 
     def __find_tool_path(self):
@@ -87,7 +99,9 @@ class Parser:
         if os.name == 'posix':
             ret = tool_path / 'fast-discovery-server'
             if not os.path.exists(ret):
-                print('fast-discovery-server tool not installed')
+                print(f'fast-discovery-server tool not found at: {ret}')
+                print('Please ensure Fast-DDS is properly built and installed.')
+                print('You may need to run: colcon build --packages-select fastrtps')
                 sys.exit(1)
         elif os.name == 'nt':
             ret = tool_path / 'fast-discovery-server.exe'

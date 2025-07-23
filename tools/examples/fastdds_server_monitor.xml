@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Fast-DDS Server Monitor - Discovery Server focused on RTPS_PDP_LISTENER for participant connection tracking -->
+<dds xmlns="http://www.eprosima.com/XMLSchemas/fastRTPS_Profiles">
+    <!-- Enhanced logging configuration for connection monitoring -->
+    <log>
+        <use_default>false</use_default>
+        <consumer>
+            <class>StdoutErrConsumer</class>
+            <property>
+                <name>stderr_threshold</name>
+                <value>Log::Kind::Info</value>
+            </property>
+        </consumer>
+    </log>
+    
+    <profiles>
+        <!-- Discovery Server participant configuration -->
+        <participant profile_name="discovery_server_participant" is_default_profile="true">
+            <domainId>0</domainId>
+            <rtps>
+                <builtin>
+                    <discovery_config>
+                        <discoveryProtocol>SERVER</discoveryProtocol>
+                    </discovery_config>
+                </builtin>
+                <prefix>44.53.00.5f.45.50.52.4f.53.49.4d.41</prefix>
+            </rtps>
+        </participant>
+    </profiles>
+</dds>

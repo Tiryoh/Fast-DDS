@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Fast-DDS Server Verbose - Discovery Server with comprehensive Info-level logging for all categories -->
+<dds xmlns="http://www.eprosima.com/XMLSchemas/fastRTPS_Profiles">
+    <log>
+        <use_default>false</use_default>
+        <consumer>
+            <class>StdoutErrConsumer</class>
+            <property>
+                <name>stderr_threshold</name>
+                <value>Log::Kind::Info</value>
+            </property>
+        </consumer>
+    </log>
+    
+    <profiles>
+        <participant profile_name="discovery_server_participant" is_default_profile="true">
+            <domainId>0</domainId>
+            <rtps>
+                <builtin>
+                    <discovery_config>
+                        <discoveryProtocol>SERVER</discoveryProtocol>
+                    </discovery_config>
+                    <metatrafficUnicastLocatorList>
+                        <locator>
+                            <udpv4>
+                                <address>0.0.0.0</address>
+                                <port>11811</port>
+                            </udpv4>
+                        </locator>
+                    </metatrafficUnicastLocatorList>
+                </builtin>
+                <prefix>44.53.00.5f.45.50.52.4f.53.49.4d.41</prefix>
+            </rtps>
+        </participant>
+    </profiles>
+</dds>

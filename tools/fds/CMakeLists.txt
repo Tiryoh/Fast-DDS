@@ -16,6 +16,9 @@ cmake_minimum_required(VERSION 3.20)
 
 project(fast-discovery-server VERSION 1.0.1 LANGUAGES CXX)
 
+# Define Fast-DDS root directory for consistent path handling
+get_filename_component(FASTDDS_ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../.." ABSOLUTE)
+
 ###############################################################################
 # Load external dependencies
 ###############################################################################
@@ -54,6 +57,7 @@ endif(MSVC)
 
 add_executable(${PROJECT_NAME}
     server.cpp
+    ${FASTDDS_ROOT_DIR}/src/cpp/utils/connection_logging.cpp
     ${FAST_SERVER_HEADERS}
     ${ALL_FAST_HEADERS})
 
@@ -102,7 +106,7 @@ install(EXPORT ${PROJECT_NAME}-targets
         )
 
 # export xsd schema
-install(FILES ../../resources/xsd/fastRTPS_profiles.xsd
+install(FILES ${FASTDDS_ROOT_DIR}/resources/xsd/fastRTPS_profiles.xsd
         DESTINATION ${DATA_INSTALL_DIR}
         COMPONENT cmake
         )
