@@ -328,7 +328,8 @@ if(CMAKE_BUILD_TYPE MATCHES "^([Dd][Ee][Bb][Uu][Gg])$"  # single config generato
    OR ("Debug" IN_LIST CMAKE_CONFIGURATION_TYPES))      # multi config generator
     option(LOG_NO_INFO ${LOG_NO_INFO_HELP} OFF)
 else()
-    option(LOG_NO_INFO ${LOG_NO_INFO_HELP} ON)
+    # option(LOG_NO_INFO ${LOG_NO_INFO_HELP} ON)
+    option(LOG_NO_INFO ${LOG_NO_INFO_HELP} OFF)
 endif()
 unset(LOG_NO_INFO_HELP)
 
