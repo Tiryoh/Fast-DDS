@@ -324,9 +324,31 @@ void PDPServerListener::onNewCacheChangeAdded(
             {
                 // TODO: pending avoid builtin connections on client info relayed by other server
 
+                std::string user_data_str = "";
+                if (!participant_data.m_userData.data_vec().empty()) {
+                    user_data_str = std::string(participant_data.m_userData.data_vec().begin(), participant_data.m_userData.data_vec().end());
+                }
+                
+                // Extract useful identification information from properties
+                std::string host_info = "", user_info = "", process_info = "";
+                for (const auto& prop : participant_data.m_properties) {
+                    if (prop.first() == "fastdds.physical_data.host") {
+                        // Extract just the hostname part (before the colon)
+                        std::string host_full = prop.second();
+                        size_t colon_pos = host_full.find(':');
+                        host_info = (colon_pos != std::string::npos) ? host_full.substr(0, colon_pos) : host_full;
+                    } else if (prop.first() == "fastdds.physical_data.user") {
+                        user_info = prop.second();
+                    } else if (prop.first() == "fastdds.physical_data.process") {
+                        process_info = prop.second();
+                    }
+                }
+                
                 EPROSIMA_LOG_INFO(RTPS_PDP_LISTENER, "PARTICIPANT CONNECTED - GUID: " << guid 
-                    << " | Name: " << participant_data.m_participantName
-                    << " | Unicast Locators count: " << participant_data.metatraffic_locators.unicast.size()
+                    << " | Host: " << host_info
+                    << " | User: " << user_info  
+                    << " | PID: " << process_info
+                    << " | Enclave: " << user_data_str
                     << " | Type: " << (is_client ? "CLIENT" : (pdp_server()->getRTPSParticipant()->getAttributes().builtin.discovery_config.discoveryProtocol == DiscoveryProtocol_t::SERVER ? "SERVER" : "OTHER")));
 
                 // Create a new participant proxy entry
