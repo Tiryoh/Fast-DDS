@@ -15,6 +15,8 @@
 #ifndef UTILS_CONNECTION_LOGGING_H_
 #define UTILS_CONNECTION_LOGGING_H_
 
+#include <cstdint>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -27,6 +29,12 @@ __attribute__((visibility("default"))) void set_connection_logging_enabled(bool 
 
 // Function to check if a log category is connection-related
 __attribute__((visibility("default"))) bool is_connection_log_category(const char* category);
+
+// Function to check if a locator is TCP transport (any port)
+__attribute__((visibility("default"))) bool is_tcp_locator(int32_t locator_kind);
+
+// Function to check if communication is TCP Discovery Server (supports any port)
+__attribute__((visibility("default"))) bool is_tcp_discovery_server_communication(int32_t locator_kind, uint16_t port);
 
 #ifdef __cplusplus
 }

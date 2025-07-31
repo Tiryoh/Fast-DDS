@@ -59,6 +59,7 @@
 #include <utils/SystemInfo.hpp>
 #include <utils/thread.hpp>
 #include <utils/threading.hpp>
+#include <utils/connection_logging.h>
 
 #include "tcp/RTCPHeader.h"
 #include "tcp/RTCPMessageManager.h"
@@ -1701,6 +1702,16 @@ void TCPTransportInterface::SocketConnected(
             }
             else
             {
+                // TCP Discovery Server connection failure detection - always log errors
+                const Locator& locator = channel->locator();
+                if (is_tcp_discovery_server_communication(locator.kind, locator.port))
+                {
+                    EPROSIMA_LOG_ERROR(RTPS_TCP_TRANSPORT, 
+                        "TCP Discovery Server connection failed - "
+                        << "Server: " << IPLocator::toIPv4string(locator) 
+                        << ":" << locator.port
+                        << ", Error: " << error.message());
+                }
                 channel->disconnect();
             }
         }

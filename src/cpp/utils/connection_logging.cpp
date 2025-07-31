@@ -15,6 +15,7 @@
 #include <utils/connection_logging.h>
 #include <cstring>
 #include <cstdlib>
+#include <cstdint>
 
 extern "C" {
 
@@ -42,8 +43,28 @@ bool is_connection_log_category(const char* category)
     // Quick filter: check first character for performance
     if (category[0] != 'R') return false;
     
-    // Check if it's exactly "RTPS_PDP_LISTENER"
-    return strcmp(category, "RTPS_PDP_LISTENER") == 0;
+    // Check if it's connection-related category
+    return strcmp(category, "RTPS_PDP_LISTENER") == 0 ||
+           strcmp(category, "RTPS_PDP_CLIENT") == 0 ||
+           strcmp(category, "RTPS_TCP_TRANSPORT") == 0;
+}
+
+
+// Function to check if a locator is TCP transport (any port)
+bool is_tcp_locator(int32_t locator_kind)
+{
+    // LOCATOR_KIND_TCPv4 = 4, LOCATOR_KIND_TCPv6 = 8
+    return (locator_kind == 4) ||  // LOCATOR_KIND_TCPv4
+           (locator_kind == 8);    // LOCATOR_KIND_TCPv6
+}
+
+// Function to check if communication is TCP Discovery Server (supports any port)
+bool is_tcp_discovery_server_communication(int32_t locator_kind, uint16_t port)
+{
+    // Simply check if it's TCP transport - any TCP communication is treated as Discovery Server
+    // This eliminates port-specific restrictions and supports arbitrary port configurations
+    (void)port;  // Suppress unused parameter warning
+    return is_tcp_locator(locator_kind);
 }
 
 }

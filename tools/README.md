@@ -72,9 +72,11 @@ colcon build --packages-select fastrtps --cmake-args -DFASTDDS_ENFORCE_LOG_INFO=
 tools/
 ├── README.md                    # This overview document
 ├── docs/                        # Detailed documentation
-│   ├── connection-logging.md    # Comprehensive logging guide
-│   ├── testing.md              # Testing procedures and commands  
-│   └── xml-configurations.md   # XML configuration file reference
+│   ├── connection-logging.md                        # Comprehensive logging guide
+│   ├── discovery-server-comprehensive-analysis.md   # Discovery Server comprehensive analysis (English)
+│   ├── discovery-server-comprehensive-analysis.ja.md # Discovery Server comprehensive analysis (Japanese)
+│   ├── testing.md                                   # Testing procedures and commands  
+│   └── xml-configurations.md                        # XML configuration file reference
 ├── examples/                    # Configuration examples
 │   ├── fastdds_server_*.xml    # Server configuration files
 │   └── fastdds_client_*.xml    # Client configuration files
@@ -88,6 +90,8 @@ tools/
 For detailed information, see:
 
 - **[Connection Logging Guide](docs/connection-logging.md)** - Complete logging setup, configuration, testing, and troubleshooting
+- **[Discovery Server Comprehensive Analysis](docs/discovery-server-comprehensive-analysis.md)** - Complete analysis of Discovery Server operation mechanisms, connection sequences, fallback conditions, and monitoring features (English)
+- **[Discovery Server 包括的分析](docs/discovery-server-comprehensive-analysis.ja.md)** - Discovery Server の動作メカニズム、接続シーケンス、フォールバック条件、監視機能の包括的分析 (日本語)
 - **[XML Configuration Guide](docs/xml-configurations.md)** - XML configuration files and usage examples
 
 ## 🚀 Quick Start
